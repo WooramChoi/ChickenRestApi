@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang='ko' xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<title>User Group</title>
+</head>
+<body>
+	<div class="container" layout:fragment="container">
+		<span th:text="${seqUserGroup}"></span>
+	</div>
+	<script type="text/javascript" th:inline="javascript" layout:fragment="custom-script">
+		/* <![CDATA[ */
+		$(function(){
+			var seqUserGroup = /*[[ ${seqUserGroup} ]]*/;
+			var str = /*[[${str}]]*/
+			HttpUtil.sendAsync('GET', '/api/userGroups/'+seqUserGroup, null, function(data){
+				console.log(data);
+			}, console.error);
+		});
+		/* ]]> */
+	</script>
+</body>
+</html>

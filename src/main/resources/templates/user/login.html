@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang='ko' xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<title>Login</title>
+</head>
+<body>
+	<div class="container" layout:fragment="container">
+		<form th:action="@{/user/login}" method="post">
+			<input type="text" name="strId" placeholder="ID"/>
+			<input type="password" name="strPass" placeholder="PASSWORD"/>
+			<input type="submit" value="전송"/>
+		</form>
+	</div>
+</body>
+</html>

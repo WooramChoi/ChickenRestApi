@@ -1,5 +1,7 @@
 package net.adonika.chicken.api.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,30 +9,35 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Code {
+public class Code implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3510688790053765401L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(columnDefinition="INT(10)")
-	private int seqCode;
+	protected int seqCode;
 	
 	@Column(columnDefinition="INT(10) default '0'", nullable=false)
-	private int seqGroup;
+	protected int seqGroup;
 	
 	@Column(columnDefinition="VARCHAR(255)", nullable=false, insertable=true)
-	private String strGroup;
+	protected String strGroup;
 	
 	@Column(columnDefinition="CHAR(4) default '0000'", nullable=false, insertable=true)
-	private String strKey;
+	protected String strKey;
 	
 	@Column(columnDefinition="VARCHAR(255)", nullable=false)
-	private String strValue;
+	protected String strValue;
 	
 	@Column(columnDefinition="INT(10) default '0'", nullable=false)
-	private int seqOrder;
+	protected int seqOrder;
 	
-	@Column(columnDefinition="CHAR(1) default 'Y'", nullable=false)
-	private String ynUse;
+	@Column(columnDefinition="TINYINT(1)", nullable=false)
+	protected boolean isUse;
 
 	public int getSeqCode() {
 		return seqCode;
@@ -80,11 +87,11 @@ public class Code {
 		this.seqOrder = seqOrder;
 	}
 
-	public String getYnUse() {
-		return ynUse;
+	public boolean isUse() {
+		return isUse;
 	}
 
-	public void setYnUse(String ynUse) {
-		this.ynUse = ynUse;
+	public void setUse(boolean isUse) {
+		this.isUse = isUse;
 	}
 }

@@ -1,5 +1,6 @@
 package net.adonika.chicken.api.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -12,37 +13,38 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 @Entity
-public class Trade {
+public class Trade implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5163012216637545872L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(columnDefinition="INT(10)")
-	private int seqTrade;
+	protected int seqTrade;
 	
 	@Column(columnDefinition="DATETIME", nullable=false)
-	private Date dtTrade;
+	protected Date dtTrade;
 	
 	@Column(columnDefinition="DECIMAL(10,2)", nullable=false)
-	private BigDecimal numTrade;
+	protected BigDecimal numTrade;
 	
 	@Column(columnDefinition="CHAR(4) default '0010'", nullable=false)
-	private String cdTypeTrade;
+	protected String cdTypeTrade;
 	
 	@Column(columnDefinition="VARCHAR(255)")
-	private String strInfo;
+	protected String strInfo;
 	
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name="seq_user")
-	private User user;
+	protected User user;
 	
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name="seq_acnt")
-	private Acnt acnt;
+	protected Acnt acnt;
 
 	public int getSeqTrade() {
 		return seqTrade;
@@ -98,33 +100,5 @@ public class Trade {
 
 	public void setAcnt(Acnt acnt) {
 		this.acnt = acnt;
-	}
-	
-	public int getSeqUser() {
-		if ( this.user == null ) {
-			this.user = new User();
-		}
-		return this.user.getSeqUser();
-	}
-	
-	public void setSeqUser(int seqUser) {
-		if ( this.user == null ) {
-			this.user = new User();
-		}
-		this.user.setSeqUser(seqUser);
-	}
-	
-	public int getSeqAcnt() {
-		if ( this.acnt == null ) {
-			this.acnt = new Acnt();
-		}
-		return this.acnt.getSeqAcnt();
-	}
-	
-	public void setSeqAcnt(int seqAcnt) {
-		if ( this.acnt == null ) {
-			this.acnt = new Acnt();
-		}
-		this.acnt.setSeqAcnt(seqAcnt);
 	}
 }

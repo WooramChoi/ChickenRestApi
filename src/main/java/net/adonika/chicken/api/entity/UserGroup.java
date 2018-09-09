@@ -1,5 +1,8 @@
 package net.adonika.chicken.api.entity;
 
+import java.io.Serializable;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,39 +11,48 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-public class UserGroup {
+public class UserGroup implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1898393003267855925L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(columnDefinition="INT(10)")
-	private int seqUserGroup;
+	protected int seqUserGroup;
 	
 	@Column(columnDefinition="VARCHAR(50)")
-	private String strName;
+	protected String strName;
 	
 	@Column(columnDefinition="CHAR(4) default '0000'")
-	private String cdTypePeriod;
+	protected String cdTypePeriod;
 	
 	@Column(columnDefinition="TINYINT(2) default '0'")
-	private int numDayPeriod;
+	protected int numDayPeriod;
 	
 	@Column(columnDefinition="TINYINT(2) default '0'")
-	private int numCntPeriod;
+	protected int numCntPeriod;
 	
 	@Column(columnDefinition="CHAR(4) default '0010'")
-	private String cdStatusGroup;
+	protected String cdStatusGroup;
 	
 	@Column(columnDefinition="VARCHAR(255)")
-	private String strInfo;
+	protected String strInfo;
 	
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name="seq_acnt")
-	private Acnt acnt;
+	protected Acnt acnt;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy="userGroup")
+	protected Set<UserJoin> userJoins;
 
 	public int getSeqUserGroup() {
 		return seqUserGroup;
@@ -105,18 +117,12 @@ public class UserGroup {
 	public void setAcnt(Acnt acnt) {
 		this.acnt = acnt;
 	}
-	
-	public int getSeqAcnt() {
-		if ( this.acnt == null ) {
-			this.acnt = new Acnt();
-		}
-		return this.acnt.getSeqAcnt();
+
+	public Set<UserJoin> getUserJoins() {
+		return userJoins;
 	}
-	
-	public void setSeqAcnt(int seqAcnt) {
-		if ( this.acnt == null ) {
-			this.acnt = new Acnt();
-		}
-		this.acnt.setSeqAcnt(seqAcnt);
+
+	public void setUserJoins(Set<UserJoin> userJoins) {
+		this.userJoins = userJoins;
 	}
 }

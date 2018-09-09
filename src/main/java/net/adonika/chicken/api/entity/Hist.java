@@ -1,5 +1,6 @@
 package net.adonika.chicken.api.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,38 +12,40 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 @Entity
-public class Hist {
+public class Hist implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6716422164011942884L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(columnDefinition="INT(10)")
-	private int seqHist;
+	protected int seqHist;
 	
 	@Column(columnDefinition="VARCHAR(50)", nullable=false)
-	private String nmTable;
+	protected String nmTable;
 	
 	@Column(columnDefinition="INT(10)", nullable=false)
-	private int seqData;
+	protected int seqData;
 	
 	@Column(columnDefinition="VARCHAR(50)")
-	private String nmField;
+	protected String nmField;
 	
 	@Column(columnDefinition="TEXT")
-	private String strFrom;
+	protected String strFrom;
 	
 	@Column(columnDefinition="TEXT")
-	private String strTo;
+	protected String strTo;
 	
 	@Column(columnDefinition="DATETIME", nullable=false)
-	private Date dtInst;
+	protected Date dtInst;
 	
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name="seq_user")
-	private User user;
+	protected User user;
 
 	public int getSeqHist() {
 		return seqHist;
@@ -106,19 +109,5 @@ public class Hist {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-	
-	public int getSeqUser() {
-		if ( this.user == null ) {
-			this.user = new User();
-		}
-		return this.user.getSeqUser();
-	}
-	
-	public void setSeqUser(int seqUser) {
-		if ( this.user == null ) {
-			this.user = new User();
-		}
-		this.user.setSeqUser(seqUser);
 	}
 }

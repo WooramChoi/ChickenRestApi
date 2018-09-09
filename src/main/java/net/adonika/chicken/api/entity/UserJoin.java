@@ -1,5 +1,7 @@
 package net.adonika.chicken.api.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,29 +11,35 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-public class UserJoin {
+public class UserJoin implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7067262567673793900L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(columnDefinition="INT(10)")
-	private int seqUserJoin;
+	protected int seqUserJoin;
 	
 	@Column(columnDefinition="CHAR(4) default '0010'", nullable=false)
-	private String cdStatusJoin;
+	protected String cdStatusJoin;
 	
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	//TODO Set unique-index to seqUser-seqUserGroup
+	@JsonBackReference
+	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name="seq_user")
-	private User user;
+	protected User user;
 	
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@JsonBackReference
+	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name="seq_user_group")
-	private UserGroup userGroup;
-	
+	protected UserGroup userGroup;
+
 	public int getSeqUserJoin() {
 		return seqUserJoin;
 	}
@@ -62,33 +70,5 @@ public class UserJoin {
 
 	public void setUserGroup(UserGroup userGroup) {
 		this.userGroup = userGroup;
-	}
-	
-	public int getSeqUser() {
-		if ( this.user == null ) {
-			this.user = new User();
-		}
-		return this.user.getSeqUser();
-	}
-	
-	public void setSeqUser(int seqUser) {
-		if ( this.user == null ) {
-			this.user = new User();
-		}
-		this.user.setSeqUser(seqUser);
-	}
-	
-	public int getSeqUserGroup() {
-		if ( this.userGroup == null ) {
-			this.userGroup = new UserGroup();
-		}
-		return this.userGroup.getSeqUserGroup();
-	}
-	
-	public void setSeqUserGroup(int seqUserGroup) {
-		if ( this.userGroup == null ) {
-			this.userGroup = new UserGroup();
-		}
-		this.userGroup.setSeqUserGroup(seqUserGroup);
 	}
 }

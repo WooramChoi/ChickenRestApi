@@ -1,5 +1,7 @@
 package net.adonika.chicken.api.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,29 +11,31 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 @Entity
-public class Board {
+public class Board implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5912660747892331944L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(columnDefinition="INT(10)")
-	private int seqBoard;
+	protected int seqBoard;
 	
 	@Column(columnDefinition="VARCHAR(255)", nullable=false)
-	private String strTitle;
+	protected String strTitle;
 	
 	@Column(columnDefinition="TEXT", nullable=false)
-	private String strContents;
+	protected String strContents;
 	
-	@Column(columnDefinition="CHAR(1) default 'Y'", nullable=false)
-	private String ynUse;
+	@Column(columnDefinition="TINYINT(1)", nullable=false)
+	protected boolean isUse;
 	
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name="seq_user")
-	private User user;
+	protected User user;
 
 	public int getSeqBoard() {
 		return seqBoard;
@@ -57,12 +61,12 @@ public class Board {
 		this.strContents = strContents;
 	}
 
-	public String getYnUse() {
-		return ynUse;
+	public boolean isUse() {
+		return isUse;
 	}
 
-	public void setYnUse(String ynUse) {
-		this.ynUse = ynUse;
+	public void setUse(boolean isUse) {
+		this.isUse = isUse;
 	}
 
 	public User getUser() {
@@ -71,19 +75,5 @@ public class Board {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-	
-	public int getSeqUser() {
-		if ( this.user == null ) {
-			this.user = new User();
-		}
-		return this.user.getSeqUser();
-	}
-	
-	public void setSeqUser(int seqUser) {
-		if ( this.user == null ) {
-			this.user = new User();
-		}
-		this.user.setSeqUser(seqUser);
 	}
 }

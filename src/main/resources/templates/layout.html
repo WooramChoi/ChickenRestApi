@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang='ko'>
+<html lang='ko' xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Welcome</title>
+<title layout:title-pattern="$CONTENT_TITLE :: $DECORATOR_TITLE">Chicken</title>
 <link rel="stylesheet" href="/css/bootstrap.min.css">
 <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
 </head>
 <body>
-
 	<!-- header -->
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="navbar-inner">
@@ -39,14 +39,14 @@
 	</div>
 	<!--// header -->
 
-	<div id="container" class="container">
+	<div class="container" layout:fragment="container">
 		<h2>Hello, World!</h2>
 	</div>
 
 	<script src="/js/jquery-3.3.1.min.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
 	<script src="/js/vue.min.js"></script>
-	<script src="/js/jquery.pjax.js"></script>
 	<script src="/js/comm.js"></script>
+	<script layout:fragment="custom-script"></script>
 </body>
 </html>
