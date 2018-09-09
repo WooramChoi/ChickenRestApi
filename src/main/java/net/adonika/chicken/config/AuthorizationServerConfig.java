@@ -15,10 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.io.Resource;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
-import org.springframework.jdbc.datasource.init.DatabasePopulator;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -26,7 +22,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -69,9 +64,47 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.jdbc(dataSource).withClient("sampleClientId").authorizedGrantTypes("implicit").scopes("read")
-				.autoApprove(true).and().withClient("clientIdPassword").secret("secret")
-				.authorizedGrantTypes("password", "authorization_code", "refresh_token").scopes("read");
+		/*clients.jdbc(dataSource)
+			.withClient("sampleClientId")
+				.authorizedGrantTypes("implicit")
+				.scopes("read")
+				.autoApprove(true)
+				.and()
+			.withClient("clientIdPassword")
+				.secret("secret")
+				.authorizedGrantTypes("password", "authorization_code", "refresh_token")
+				.scopes("read");*/
+		clients.jdbc(dataSource)
+			.withClient("normal-app")
+		        .authorizedGrantTypes("authorization_code", "implicit")
+		        .authorities("ROLE_CLIENT")
+		        .scopes("read", "write")
+		        .resourceIds(resourceId)
+		        .accessTokenValiditySeconds(accessTokenValiditySeconds)
+		        .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
+		        .and()
+		    .withClient("trusted-app")
+		        .authorizedGrantTypes("client_credentials", "password", "refresh_token")
+		        .authorities("ROLE_TRUSTED_CLIENT")
+		        .scopes("read", "write")
+		        .resourceIds(resourceId)
+		        .accessTokenValiditySeconds(accessTokenValiditySeconds)
+		        .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
+		        .secret("secret")
+		        .and()
+		    .withClient("register-app")
+		        .authorizedGrantTypes("client_credentials")
+		        .authorities("ROLE_REGISTER")
+		        .scopes("read")
+		        .resourceIds(resourceId)
+		        .secret("secret")
+		    .and()
+		        .withClient("my-client-with-registered-redirect")
+		        .authorizedGrantTypes("authorization_code")
+		        .authorities("ROLE_CLIENT")
+		        .scopes("read", "trust")
+		        .resourceIds("oauth2-resource")
+		        .redirectUris("http://anywhere?key=value");
 	}
 
 	@Bean
@@ -79,22 +112,22 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		return new JdbcTokenStore(dataSource);
 	}
 
-	@Value("classpath:schema.sql")
-	private Resource schemaScript;
+	/*@Value("classpath:schema.sql")
+	private Resource schemaScript;*/
 
-	@Bean
+	/*@Bean
 	public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
 		DataSourceInitializer initializer = new DataSourceInitializer();
 		initializer.setDataSource(dataSource);
 		initializer.setDatabasePopulator(databasePopulator());
 		return initializer;
-	}
+	}*/
 
-	private DatabasePopulator databasePopulator() {
+	/*private DatabasePopulator databasePopulator() {
 		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
 		populator.addScript(schemaScript);
 		return populator;
-	}
+	}*/
 
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {

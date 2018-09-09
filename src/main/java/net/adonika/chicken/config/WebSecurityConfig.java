@@ -3,6 +3,7 @@ package net.adonika.chicken.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,8 +33,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// TODO api를 기준으로 제작되어야함
 		// 권한이 없는 행위에 대해 요청된 헤더에 따라 text/html, appication/json으로 구분해서 응답해줘야할텐데..
 		http
-        .authorizeRequests()
+			.csrf().disable()	// CSRF: Spring이 유효한(반복되지 않는) Form 요청인지를 검증하기 위해 만드는 임시 키값
+        	.authorizeRequests()
             .antMatchers("/", "/css/**", "/fonts/**", "/js/**", "/favicon.ico").permitAll()
+            .antMatchers(HttpMethod.OPTIONS).permitAll()
             .antMatchers("/api/browser/index.html**").hasAuthority("ROLE_ADMIN")
             .antMatchers("/userGroups/**").hasAuthority("ROLE_USER")
             .anyRequest().authenticated()
