@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Board implements Serializable{
 	
@@ -33,6 +35,7 @@ public class Board implements Serializable{
 	@Column(columnDefinition="TINYINT(1)", nullable=false)
 	protected boolean isUse;
 	
+	@JsonBackReference
 	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name="seq_user")
 	protected User user;

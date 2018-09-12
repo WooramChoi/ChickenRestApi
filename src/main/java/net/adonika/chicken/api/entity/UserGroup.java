@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -46,6 +47,7 @@ public class UserGroup implements Serializable{
 	@Column(columnDefinition="VARCHAR(255)")
 	protected String strInfo;
 	
+	@JsonBackReference
 	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name="seq_acnt")
 	protected Acnt acnt;

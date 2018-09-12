@@ -1,8 +1,19 @@
+# Server
 server:
   port: 8080
   servlet:
     context-path: /
-spring:
+
+# Logger
+logging: 
+  level: 
+    org: 
+      springframework: 
+        security: DEBUG
+  path: /logs
+
+# Spring
+spring: 
   data:
     rest:
       base-path: /api
@@ -19,8 +30,15 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL57Dialect
+#        default_batch_fetch_size: 20 # 자식객체 query 날리는걸 in 구문으로 변경해줌
     show-sql: true
 security:
-  oauth2:
+  oauth2: 
+#    client: 
+#      clientId: trusted-app
+#      clientSecret: secret
+#      accessTokenUri: /oauth/token
+#      userAuthorizationUri: /oauth/authorize
     resource:
       id: chicken_rest_api
+#      userInfoUri: /users

@@ -14,7 +14,7 @@ import org.springframework.web.filter.GenericFilterBean;
 
 public class UserSecurityFilter extends GenericFilterBean {
 	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger logger = LoggerFactory.getLogger(UserSecurityFilter.class.getName());
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

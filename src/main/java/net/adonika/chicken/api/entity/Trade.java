@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Trade implements Serializable{
 	
@@ -38,10 +40,12 @@ public class Trade implements Serializable{
 	@Column(columnDefinition="VARCHAR(255)")
 	protected String strInfo;
 	
+	@JsonBackReference
 	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name="seq_user")
 	protected User user;
 	
+	@JsonBackReference
 	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name="seq_acnt")
 	protected Acnt acnt;

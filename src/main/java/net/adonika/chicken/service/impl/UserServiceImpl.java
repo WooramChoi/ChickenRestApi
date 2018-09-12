@@ -18,7 +18,7 @@ import net.adonika.chicken.service.UserService;
 @Service("userService")
 public class UserServiceImpl implements UserService, UserDetailsService {
 	
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class.getName());
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -30,12 +30,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		logger.info("LOGIN TRY: {}", username);
 		User user = userRepository.findByStrId(username);
 		if(user == null) {
 			logger.warn("LOGIN FAILED: USER NOT FOUND {}", username);
 			throw new UsernameNotFoundException("User Not Found");
 		}
-		logger.info("LOGIN TRY: {}", username);
+		logger.info("strPass: {}", user.getStrPass());
 		return new UserVO(user);
 	}
 

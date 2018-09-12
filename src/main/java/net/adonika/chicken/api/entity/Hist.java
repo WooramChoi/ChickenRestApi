@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Hist implements Serializable{
 
@@ -43,6 +45,7 @@ public class Hist implements Serializable{
 	@Column(columnDefinition="DATETIME", nullable=false)
 	protected Date dtInst;
 	
+	@JsonBackReference
 	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name="seq_user")
 	protected User user;

@@ -6,12 +6,22 @@
 <title>Login</title>
 </head>
 <body>
-	<div class="container" layout:fragment="container">
-		<form th:action="@{/user/login}" method="post">
-			<input type="text" name="strId" placeholder="ID"/>
-			<input type="password" name="strPass" placeholder="PASSWORD"/>
-			<input type="submit" value="전송"/>
+	<div class="container" layout:fragment="container" onsubmit="return false;">
+		<form th:action="@{/user/login}" id="frmLogin" method="post">
+			<input type="hidden" name="grant_type" value="password"/>
+			<input type="text" name="username" placeholder="ID" />
+			<input type="password" name="password" placeholder="PASSWORD" />
+			<input type="submit" id="btnSubmit" value="전송" />
 		</form>
 	</div>
+	<script type="text/javascript" layout:fragment="custom-script">
+		$(function() {
+			$('#btnSubmit').on('click', function(e) {
+				var data = $('#frmLogin').serialize();
+				console.log('requestParam: ' + data);
+				//HttpUtil.sendAsync('POST', '/oauth/token', data, console.log, console.log);
+			});
+		});
+	</script>
 </body>
 </html>
