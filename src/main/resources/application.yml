@@ -37,8 +37,13 @@ security:
 #    client: 
 #      clientId: trusted-app
 #      clientSecret: secret
-#      accessTokenUri: /oauth/token
-#      userAuthorizationUri: /oauth/authorize
+#      accessTokenUri: http://localhost:${server.port}/oauth/token
+#      userAuthorizationUri: http://localhost:${server.port}/oauth/authorize
+#      tokenName: Authorization
+#      authenticationScheme: query
+#      clientAuthenticationScheme: form
     resource:
       id: chicken_rest_api
-#      userInfoUri: /users
+#      userInfoUri: http://localhost:${server.port}/me
+#      jwt: 
+#        key-uri: https://localhost:${server.port}/oauth/token_key

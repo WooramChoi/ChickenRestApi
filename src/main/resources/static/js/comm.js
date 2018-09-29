@@ -55,6 +55,27 @@ const HttpUtil = {
 				// 아 상태에 따라서 처리해야한다.
 			}
 		}
+	},
+	oAuthLogin: function(params, onSuccess, onFailed) {
+		$.ajax({
+			method: 'POST',
+			url: '/oauth/token',
+			data: params,
+			contentType: 'application/x-www-form-urlencoded',
+			beforeSend: function (xhr) {
+			    xhr.setRequestHeader ("Authorization", "Basic " + btoa('trusted-app:secret'));
+			},
+			success: function(data, textStatus, jqXHR) {
+				if(onSuccess){
+					onSuccess(data);
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				if(onFailed){
+					onFailed(jqXHR);
+				}
+			}
+		});
 	}
 };
 

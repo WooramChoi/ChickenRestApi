@@ -19,7 +19,7 @@
 			$('#btnSubmit').on('click', function(e) {
 				var data = $('#frmLogin').serialize();
 				console.log('requestParam: ' + data);
-				//HttpUtil.sendAsync('POST', '/oauth/token', data, console.log, console.log);
+				HttpUtil.oAuthLogin(data, console.log, console.log);
 			});
 		});
 	</script>

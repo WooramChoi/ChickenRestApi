@@ -26,6 +26,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
@@ -72,8 +73,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.jdbc(dataSource)
-//		clients.inMemory()
+		/*clients.jdbc(dataSource)	// jdbc 사용시
+//		clients.inMemory()	//인메모리 사용시
 			.withClient("normal-app")
 		        .authorizedGrantTypes("authorization_code", "implicit")
 		        .authorities("ROLE_CLIENT")
@@ -103,20 +104,21 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		        .authorities("ROLE_CLIENT")
 		        .scopes("read", "trust")
 		        .resourceIds("oauth2-resource")
-		        .redirectUris("http://anywhere?key=value");
+		        .redirectUris("http://anywhere?key=value");*/	//최초 실행시에만.
+		clients.withClientDetails(jdbcClientDetailsService(dataSource));
 	}
 
 	@Bean
 	public TokenStore tokenStore() {
-		return new JdbcTokenStore(dataSource);
-//		return new JwtTokenStore(accessTokenConverter());
+		return new JdbcTokenStore(dataSource);	//jdbc 사용시
+//		return new JwtTokenStore(accessTokenConverter());	//인메모리 사용시
 	}
 
 	@Bean
 	public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
 		DataSourceInitializer initializer = new DataSourceInitializer();
 		initializer.setDataSource(dataSource);
-		initializer.setDatabasePopulator(databasePopulator());
+		//initializer.setDatabasePopulator(databasePopulator());	//최초 실행시에만.
 		return initializer;
 	}
 	
@@ -127,6 +129,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
 		populator.addScript(schemaScript);
 		return populator;
+	}
+	
+	public JdbcClientDetailsService jdbcClientDetailsService(DataSource dataSource) {
+		return new JdbcClientDetailsService(dataSource);
 	}
 
 	@Bean
